@@ -1,0 +1,88 @@
+CREATE DATABASE resilia;
+
+CREATE TABLE alunos (
+  id_aluno int NOT NULL,
+  nome varchar(255) NOT NULL,
+  idade int DEFAULT NULL,
+  cpf varchar(11) DEFAULT NULL,
+  email varchar(255) DEFAULT NULL,
+  turma int NOT NULL,
+  PRIMARY KEY (id_aluno),
+  UNIQUE KEY id_aluno_UNIQUE (id_aluno)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE cursos (
+  id_curso int NOT NULL,
+  curso varchar(255) NOT NULL,
+  PRIMARY KEY (id_curso),
+  UNIQUE KEY curso_UNIQUE (curso)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+CREATE TABLE professores (
+  id int NOT NULL,
+  nome varchar(255) NOT NULL,
+  curso varchar(255) NOT NULL,
+  idade int DEFAULT NULL,
+  cpf varchar(11) NOT NULL,
+  email varchar(255) DEFAULT NULL,
+  PRIMARY KEY (id),
+  KEY curso_idx (curso)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE turmas (
+  turma int NOT NULL,
+  qntd_alunos int DEFAULT NULL,
+  id_prof int NOT NULL,
+  id_curso int NOT NULL,
+  PRIMARY KEY (turma),
+  KEY id_prof (id_prof),
+  KEY id_curso (id_curso),
+  CONSTRAINT id_curso FOREIGN KEY (id_curso) REFERENCES cursos (id_curso),
+  CONSTRAINT id_prof FOREIGN KEY (id_prof) REFERENCES professores (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+ALTER TABLE resilia.alunos
+ADD CONSTRAINT turma
+	foreign key turma(turma)
+    REFERENCES resilia.turmas (turma);
+    
+ALTER TABLE resilia.professores
+ADD CONSTRAINT curso
+FOREIGN KEY curso(curso)
+REFERENCES resilia.cursos (curso);
+    
+ALTER TABLE resilia.turmas
+DROP qntd_alunos;
+
+
+INSERT
+	INTO cursos
+    VALUES ('1', 'back-end');
+INSERT
+	INTO cursos (id_curso, curso)
+    VALUES ('2', 'front-end');
+SELECT * FROM cursos;
+INSERT
+	INTO professores
+    VALUES ('1', 'ALBERT EINSTEN', 'back-end', '62', '18275403927', '150QI@gmail.com');
+INSERT
+	INTO professores
+    VALUES ('2', 'ISAAC NEWTON', 'front-end', '48', '79482745362', 'LEGISLADOR@gmail.com');
+SELECT * FROM professores;
+
+INSERT
+	INTO turmas	
+    VALUES ('1001', '1', '1');
+INSERT
+	INTO turmas	
+    VALUES ('2002', '2', '2');
+SELECT * FROM turmas;
+
+INSERT
+	INTO alunos
+    VALUES ('1', 'RAMON', '23', '19827364981', 'oTimido@gmail.com', '1001');
+INSERT
+	INTO alunos
+    VALUES ('2', 'EVELLYN', '22', '63827647391', 'EVE@gmail.com', '2002');
+SELECT * FROM alunos;
